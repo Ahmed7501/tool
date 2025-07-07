@@ -35,7 +35,7 @@ def install_playwright_browsers():
 def check_playwright_installation():
     """Check if Playwright is properly installed."""
     try:
-        import playwright
+        import playwright  # type: ignore
         print("✅ Playwright Python package is installed")
         return True
     except ImportError:

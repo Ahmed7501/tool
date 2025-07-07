@@ -67,6 +67,8 @@ class PlaywrightEmailScraper:
             await self.init_browser()
             
             # Create a new page
+            if self.browser is None:
+                raise Exception("Browser not initialized")
             page = await self.browser.new_page()
             
             # Set user agent to avoid detection

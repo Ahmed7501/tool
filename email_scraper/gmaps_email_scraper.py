@@ -261,6 +261,8 @@ class GoogleMapsEmailScraper:
         for index, row in gmaps_df.iterrows():
             try:
                 # Create a new page for each request
+                if self.browser is None:
+                    raise Exception("Browser not initialized")
                 page = await self.browser.new_page()
                 
                 # Set user agent to avoid detection
@@ -304,7 +306,7 @@ def read_input_file(filepath):
         elif file_extension == '.docx':
             logging.info(f"Reading Word file: {filepath}")
             # Read Word document and extract text
-            doc = docx.Document(filepath)
+            doc = docx.Document(str(filepath))
             text_content = []
             for paragraph in doc.paragraphs:
                 text_content.append(paragraph.text)

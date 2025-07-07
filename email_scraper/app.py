@@ -6,23 +6,30 @@ import docx
 import io
 import time
 import sys
+import os
 
 # Add the current directory to Python path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# Define a base EmailScraper class for type hints
+class EmailScraper:
+    def __init__(self, delay: float = 0.5, max_concurrent: int = 10):
+        pass
+    
+    def process_urls(self, input_file: str, output_file: str) -> int:
+        return 0
+
 try:
-    from email_scraper.scraper import EmailScraper
+    from email_scraper.scraper import EmailScraper as RealEmailScraper
+    EmailScraper = RealEmailScraper  # type: ignore
 except ImportError:
     try:
-        # Fallback import if the above doesn't work
-        from scraper import EmailScraper
+        # Try direct import from current directory
+        from scraper import EmailScraper as RealEmailScraper  # type: ignore
+        EmailScraper = RealEmailScraper  # type: ignore
     except ImportError:
-        # If scraper is not available, create a placeholder
-        class EmailScraper:
-            def __init__(self, delay=0.5, max_concurrent=10):
-                pass
-            def process_urls(self, input_file, output_file):
-                return 0
+        # Use the placeholder class defined above
+        pass
 
 # Configure Streamlit page
 st.set_page_config(
