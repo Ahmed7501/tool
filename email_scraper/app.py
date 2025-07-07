@@ -2,10 +2,19 @@ import streamlit as st
 import pandas as pd
 import tempfile
 import os
-from email_scraper.scraper import EmailScraper
 import docx
 import io
 import time
+import sys
+
+# Add the current directory to Python path for imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from email_scraper.scraper import EmailScraper
+except ImportError:
+    # Fallback import if the above doesn't work
+    from scraper import EmailScraper
 
 # Configure Streamlit page
 st.set_page_config(

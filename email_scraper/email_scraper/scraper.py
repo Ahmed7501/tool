@@ -9,7 +9,6 @@ import os
 from urllib.parse import urlparse
 import logging
 from concurrent.futures import ThreadPoolExecutor
-import aiofiles
 
 # Set up logging
 logging.basicConfig(
@@ -57,10 +56,13 @@ class EmailScraper:
     async def scrape_url(self, url):
         """Scrape emails from a single URL using async."""
         try:
+            await self.init_session()
+            
             if not self.session:
-                await self.init_session()
+                raise Exception("Failed to initialize session")
 
-            async with self.session.get(url, timeout=10) as response:
+            timeout = aiohttp.ClientTimeout(total=10)
+            async with self.session.get(url, timeout=timeout) as response:
                 if response.status == 200:
                     html = await response.text()
                     soup = BeautifulSoup(html, 'html.parser')
@@ -82,8 +84,22 @@ class EmailScraper:
                         'domain': domain
                     }
                 else:
-                    raise Exception(f"HTTP {response.status}")
+                    logging.warning(f"HTTP {response.status} for {url}")
+                    return {
+                        'url': url,
+                        'business': self.get_domain_name(url),
+                        'emails': '',
+                        'domain': self.get_domain_name(url)
+                    }
                     
+        except asyncio.TimeoutError:
+            logging.error(f"Timeout error scraping {url}")
+            return {
+                'url': url,
+                'business': self.get_domain_name(url),
+                'emails': '',
+                'domain': self.get_domain_name(url)
+            }
         except Exception as e:
             logging.error(f"Error scraping {url}: {str(e)}")
             return {
