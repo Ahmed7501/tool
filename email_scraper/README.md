@@ -2,6 +2,45 @@
 
 A web application for scraping email addresses from multiple URLs in bulk. The app supports various file formats and provides a user-friendly interface for uploading files and downloading results.
 
+## 🆕 Playwright Email Scraper
+
+This project now includes a **Playwright-based email scraper** that can handle JavaScript-rendered content! The new scraper:
+
+- ✅ **Handles JavaScript-rendered pages** - No more missed emails from dynamic content
+- ✅ **Robust email regex** - Supports all TLDs (`.com`, `.online`, `.agency`, etc.)
+- ✅ **Graceful error handling** - Handles timeouts, connection errors, and invalid pages
+- ✅ **Clear logging** - Shows exactly what's happening during scraping
+- ✅ **Duplicate removal** - Automatically removes duplicate emails
+- ✅ **Simple to use** - Single file, user inputs URL
+
+### Quick Start (Playwright Scraper)
+
+1. **Install dependencies:**
+   ```bash
+   pip install playwright
+   ```
+
+2. **Setup Playwright browsers:**
+   ```bash
+   python setup_playwright.py
+   ```
+
+3. **Run the scraper:**
+   ```bash
+   python playwright_email_scraper.py
+   ```
+
+4. **Enter a URL when prompted** and watch it extract emails from JavaScript-rendered content!
+
+### Features of the Playwright Scraper
+
+- **15-second timeout** for page loading
+- **3-5 second wait** after page load for JavaScript content
+- **Network idle detection** for fully loaded pages
+- **User agent spoofing** to avoid detection
+- **Comprehensive error handling** with detailed logging
+- **Duplicate email removal** while preserving order
+
 ## Features
 
 - Support for multiple file formats (TXT, Excel, Word)
