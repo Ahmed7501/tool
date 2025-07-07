@@ -23,8 +23,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Increase file size limit to 200MB
-st.set_option('server.maxUploadSize', 200)
+# File size limit is configured in .streamlit/config.toml
 
 def extract_urls_from_txt(file_content):
     """Extract URLs from text file content."""
