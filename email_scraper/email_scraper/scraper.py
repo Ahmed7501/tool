@@ -138,6 +138,16 @@ class EmailScraper:
 
             # Create DataFrame and save to CSV
             df = pd.DataFrame(results)
+            
+            # Ensure all required columns exist
+            required_columns = ['url', 'business', 'emails', 'domain']
+            for col in required_columns:
+                if col not in df.columns:
+                    df[col] = ''
+            
+            # Ensure emails column is string type
+            df['emails'] = df['emails'].fillna('').astype(str)
+            
             df.to_csv(output_file, index=False)
             logging.info(f"Results saved to {output_file}")
             

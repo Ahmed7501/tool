@@ -135,35 +135,63 @@ if uploaded_file:
                 time_taken = time.time() - start_time
                 
                 if processed_count > 0:
-                    # Read and display results
-                    df = pd.read_csv(output_file)
-                    
-                    # Update progress to 100%
-                    progress_bar.progress(100)
-                    status_text.text("Scraping complete!")
-                    
-                    st.success(f"Scraping completed in {time_taken:.1f} seconds!")
-                    
-                    # Show results in expandable sections
-                    with st.expander("View Results", expanded=True):
-                        st.dataframe(df)
-                    
-                    # Download button
-                    with open(output_file, "rb") as f:
-                        st.download_button(
-                            label="Download CSV",
-                            data=f,
-                            file_name="scraped_emails.csv",
-                            mime="text/csv"
-                        )
-                    
-                    # Show statistics
-                    st.write("### Statistics")
-                    total_emails = df['emails'].str.count(',').fillna(0).astype(int) + (df['emails'] != '').astype(int)
-                    st.write(f"Total URLs processed: {len(df)}")
-                    st.write(f"Total emails found: {total_emails.sum()}")
-                    st.write(f"URLs with emails: {len(df[df['emails'] != ''])}")
-                    st.write(f"Average time per URL: {time_taken/len(df):.2f} seconds")
+                    try:
+                        # Read and display results
+                        df = pd.read_csv(output_file)
+                        
+                        # Ensure required columns exist
+                        if 'emails' not in df.columns:
+                            df['emails'] = ''
+                        
+                        # Update progress to 100%
+                        progress_bar.progress(100)
+                        status_text.text("Scraping complete!")
+                        
+                        st.success(f"Scraping completed in {time_taken:.1f} seconds!")
+                        
+                        # Show results in expandable sections
+                        with st.expander("View Results", expanded=True):
+                            st.dataframe(df)
+                        
+                        # Download button
+                        with open(output_file, "rb") as f:
+                            st.download_button(
+                                label="Download CSV",
+                                data=f,
+                                file_name="scraped_emails.csv",
+                                mime="text/csv"
+                            )
+                        
+                        # Show statistics
+                        st.write("### Statistics")
+                        
+                        try:
+                            # Handle potential non-string values in emails column
+                            emails_series = df['emails'].fillna('').astype(str)
+                            total_emails = emails_series.str.count(',').fillna(0).astype(int) + (emails_series != '').astype(int)
+                            
+                            st.write(f"Total URLs processed: {len(df)}")
+                            st.write(f"Total emails found: {total_emails.sum()}")
+                            st.write(f"URLs with emails: {len(df[df['emails'].fillna('') != ''])}")
+                            st.write(f"Average time per URL: {time_taken/len(df):.2f} seconds")
+                        except Exception as stats_error:
+                            st.write(f"Total URLs processed: {len(df)}")
+                            st.write("Could not calculate email statistics")
+                            st.error(f"Statistics error: {str(stats_error)}")
+                            
+                    except Exception as e:
+                        st.error(f"Error processing results: {str(e)}")
+                        st.write("Raw results file created but could not be processed")
+                        
+                        # Try to show basic file info
+                        try:
+                            with open(output_file, 'r') as f:
+                                content = f.read()
+                                st.text_area("Raw CSV Content", content, height=200)
+                        except:
+                            st.write("Could not read output file")
+                else:
+                    st.warning("No URLs were processed successfully. Please check your URLs and try again.")
                 
                 # Cleanup temporary files
                 os.remove(tmp_path)
