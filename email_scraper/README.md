@@ -41,6 +41,58 @@ This project now includes a **Playwright-based email scraper** that can handle J
 - **Comprehensive error handling** with detailed logging
 - **Duplicate email removal** while preserving order
 
+## 🗺️ Google Maps Email Scraper
+
+A specialized scraper that processes Google Maps URLs and extracts emails from business websites.
+
+### Features
+
+- ✅ **Multi-format input** - Supports `.xlsx`, `.csv`, `.docx` files
+- ✅ **Automatic URL detection** - Finds Google Maps URLs in any column
+- ✅ **Website extraction** - Extracts business websites from Google Maps listings
+- ✅ **Email scraping** - Scrapes emails from business websites using Playwright
+- ✅ **Dual output** - Saves results to both `.xlsx` and `.csv` formats
+- ✅ **Comprehensive logging** - Detailed progress and error reporting
+- ✅ **Rate limiting** - Built-in delays to avoid being blocked
+- ✅ **Error handling** - Graceful handling of missing websites and failed scrapes
+
+### Quick Start (Google Maps Scraper)
+
+1. **Setup the scraper:**
+   ```bash
+   python setup_gmaps_scraper.py
+   ```
+
+2. **Run the scraper:**
+   ```bash
+   python gmaps_email_scraper.py
+   ```
+
+3. **Enter your input file path** when prompted (e.g., `google.xlsx`)
+
+4. **Results will be saved** to `results.xlsx` and `results.csv`
+
+### Input File Format
+
+Your input file should contain Google Maps URLs in any column. The scraper will automatically detect columns with names like:
+- `href`
+- `Link` 
+- `Website`
+- `URL`
+- `Maps`
+- `Google`
+
+Or any column containing Google Maps URLs.
+
+### Output Format
+
+The results include:
+- **Original row data** (Title, Phone, Address, etc.)
+- **Original_URL** - The Google Maps URL
+- **Website_URL** - The extracted business website
+- **Found_Emails** - Comma-separated list of emails
+- **Status** - Success/error status message
+
 ## Features
 
 - Support for multiple file formats (TXT, Excel, Word)
