@@ -13,8 +13,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     from email_scraper.scraper import EmailScraper
 except ImportError:
-    # Fallback import if the above doesn't work
-    from scraper import EmailScraper
+    try:
+        # Fallback import if the above doesn't work
+        from scraper import EmailScraper
+    except ImportError:
+        # If scraper is not available, create a placeholder
+        class EmailScraper:
+            def __init__(self, delay=0.5, max_concurrent=10):
+                pass
+            def process_urls(self, input_file, output_file):
+                return 0
 
 # Configure Streamlit page
 st.set_page_config(

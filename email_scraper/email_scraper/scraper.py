@@ -75,6 +75,9 @@ class EmailScraper:
         try:
             await self.init_browser()
             
+            if not self.browser:
+                raise Exception("Failed to initialize browser")
+            
             # Create a new page
             page = await self.browser.new_page()
             
